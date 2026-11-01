@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>プレゼントキャッチゲーム 🎄</title>
+    <link rel="icon" href="アイコン.png" type="image/png">
+    <style>
+        /* 背景枠の外を完全に白に変更 */
+        body { 
+            text-align: center; 
+            background: #ffffff !important; 
+            color: #333333;
+            font-family: sans-serif; 
+            margin: 0; 
+            padding: 20px; 
+        }
+        h2 {
+            color: #ef4444; /* クリスマスレッド */
+            text-shadow: 0 0 4px rgba(239, 68, 68, 0.1);
+        }
+        /* 枠の中は白、枠は赤のゲーム画面 */
+        canvas { 
+            background: #ffffff; 
+            display: block; 
+            margin: 10px auto; 
+            border: 3px solid #ef4444; /* 赤い枠線 */
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(239, 68, 68, 0.1);
+            max-width: 100%; 
+            height: auto; 
+        }
+        .btn-container { margin-top: 10px; }
+        /* 操作ボタンもクリスマスレッドに統一 */
+        .control-btn { 
+            font-size: 24px; 
+            padding: 10px 30px; 
+            margin: 0 10px; 
+            cursor: pointer; 
+            background: #ef4444; 
+            color: white; 
+            border: none; 
+            border-radius: 5px; 
+            font-weight: bold;
+            box-shadow: 0 4px 0 #b91c1c;
+            transition: transform 0.1s;
+        }
+        .control-btn:active { 
+            background: #dc2626; 
+            transform: translateY(4px);
+            box-shadow: none;
+        }
+    </style>
+</head>
+<body>
+    <h2>プレゼントキャッチゲーム 🎄</h2>
+    <p>キーボード、画面のボタン、またはタッチでかごを動かそう！</p>
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
+    
+    <!-- スマホ用ボタン -->
+    <div class="btn-container">
+        <button class="control-btn" id="leftBtn">←</button>
+        <button class="control-btn" id="rightBtn">→</button>
+    </div>
+
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+
+        // かごのカラーを鮮やかなクリスマスレッド（#ef4444）に設定
+        let basket = { x: 160, y: 350, width: 80, height: 20, color: "#ef4444" };
+        
+        // 落ちてくるアイテムのデータ（初期タイプはpresent）
+        let item = { x: Math.random() * 370, y: 0, radius: 20, speed: 3, type: "present" };
+        let score = 0;
+        
+        // 保存された最高得点を読み込む
+        let highScore = localStorage.getItem("presentHighScore") || 0;
+
+        let rightPressed = false;
+        let leftPressed = false;
+
+        // キーボード操作
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "ArrowRight") rightPressed = true;
+            if (e.key === "ArrowLeft") leftPressed = true;
+        });
+        document.addEventListener("keyup", (e) => {
+            if (e.key === "ArrowRight") rightPressed = false;
+            if (e.key === "ArrowLeft") leftPressed = false;
+        });
+
+        // 画面ボタン操作（スマホ用）
+        const leftBtn = document.getElementById("leftBtn");
+        const rightBtn = document.getElementById("rightBtn");
+
+        leftBtn.addEventListener("mousedown", () => leftPressed = true);
+        leftBtn.addEventListener("mouseup", () => leftPressed = false);
+        leftBtn.addEventListener("touchstart", (e) => { leftPressed = true; e.preventDefault(); });
+        leftBtn.addEventListener("touchend", (e) => { leftPressed = false; e.preventDefault(); });
+
+        rightBtn.addEventListener("mousedown", () => rightPressed = true);
+        rightBtn.addEventListener("mouseup", () => rightPressed = false);
+        rightBtn.addEventListener("touchstart", (e) => { rightPressed = true; e.preventDefault(); });
+        rightBtn.addEventListener("touchend", (e) => { rightPressed = false; e.preventDefault(); });
+
+        function update() {
+            if (rightPressed && basket.x < canvas.width - basket.width) basket.x += 6;
+            if (leftPressed && basket.x > 0) basket.x -= 6;
+
+            item.y += item.speed;
+            
+            // キャッチ判定
+            if (item.y + item.radius >= basket.y &&
+                item.x >= basket.x &&
+                item.x <= basket.x + basket.width) {
+                score++;
+                
+                // 最高得点を更新して保存
+                if (score > highScore) {
+                    highScore = score;
+                    localStorage.setItem("presentHighScore", highScore);
+                }
+
+                resetItem();
+            }
+            
+            // 下まで落ちたとき
+            if (item.y > canvas.height) {
+                resetItem();
+            }
+        }
+
+        // アイテムがリセットされるときに、プレゼントか雪の結晶かをランダムで決定
+        function resetItem() {
+            item.y = 0;
+            item.x = Math.random() * (canvas.width - 40) + 20;
+            item.speed += 0.1;
+            item.type = Math.random() < 0.5 ? "present" : "snowflake";
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // かごを描く
+            ctx.fillStyle = basket.color;
+            ctx.fillRect(basket.x, basket.y, basket.width, basket.height);
+            
+            // 💡 外部の画像ファイルではなく、絵文字「🎁」「❄️」を直接画面に描画するハイテク仕様！
+            ctx.font = "32px sans-serif";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            
+            if (item.type === "present") {
+                ctx.fillText("🎁", item.x + 40, item.y); // かごの判定幅に合わせて中央寄せ調整
+            } else {
+                ctx.fillText("❄️", item.x + 40, item.y);
+            }
+            
+            // スコアと最高得点を描画
+            ctx.fillStyle = "#333333";
+            ctx.font = "bold 16px sans-serif";
+            ctx.textAlign = "left";
+            ctx.textBaseline = "alphabetic";
+            ctx.fillText("スコア: " + score, 10, 25);
+            ctx.fillText("さいこう: " + highScore, 10, 50);
+        }
+
+        function loop() {
+            update();
+            draw();
+            requestAnimationFrame(loop);
+        }
+
+        loop();
+    </script>
+</body>
+</html>

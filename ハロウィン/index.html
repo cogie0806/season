@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ハロウィン特設イベントページ 🎃</title>
+    <!-- ファビコンの指定を「アイコン.png」に修正 -->
+<link rel="icon" href="アイコン.png" type="image/png">
+
+
+    <style>
+      /* 全体のリセットとハロウィンカラー（黒・紫・オレンジ）の設定 */
+      body {
+        font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+        background-color: #1a1126; /* 怪しげなディープパープル */
+        color: #f3f4f6;
+        line-height: 1.6;
+        margin: 0;
+        padding: 40px 20px;
+      }
+
+      /* コンテナ（カボチャオレンジのネオン風の影） */
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: #251c33;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 0 20px rgba(249, 115, 22, 0.3);
+        border: 2px solid #f97316; /* パンプキンオレンジ of 枠線 */
+      }
+
+      /* ヘッダー部分 */
+      h1 {
+        font-size: 28px;
+        color: #f97316;
+        text-align: center;
+        text-shadow: 0 0 10px rgba(249, 115, 22, 0.5);
+        border-bottom: 2px dashed #a855f7; /* パープルの破線 */
+        padding-bottom: 15px;
+        margin-bottom: 10px;
+      }
+      
+      .subtitle {
+        font-size: 15px;
+        color: #cbd5e1;
+        text-align: center;
+        margin-bottom: 40px;
+      }
+
+      /* セクションの見出し */
+      h3 {
+        font-size: 18px;
+        color: #c084fc;
+        margin-top: 30px;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+      }
+
+      /* イベントブロック */
+      .event-item {
+        background: #312643;
+        border-left: 4px solid #f97316;
+        padding: 20px;
+        margin-bottom: 20px;
+        border-radius: 0 8px 8px 0;
+      }
+
+      h4 {
+        font-size: 17px;
+        color: #fdba74;
+        margin: 0 0 8px 0;
+      }
+
+      p {
+        font-size: 15px;
+        margin: 0 0 15px 0;
+        color: #e2e8f0;
+      }
+
+      /* 特設ボタン（怪しく光るホバーエフェクト） */
+      .btn {
+        display: inline-block;
+        background: #f97316;
+        color: #1a1126;
+        padding: 8px 18px;
+        text-decoration: none;
+        border-radius: 6px;
+        font-weight: bold;
+        transition: all 0.2s ease;
+      }
+
+      .btn:hover {
+        background: #ea580c;
+        box-shadow: 0 0 10px rgba(234, 88, 12, 0.8);
+      }
+
+      /* フッター */
+      .footer-date {
+        text-align: right;
+        font-size: 13px;
+        color: #94a3b8;
+        margin-top: 40px;
+        border-top: 1px solid #473860;
+        padding-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+
+       <div class="container">
+      <h1>🎃 cogie0806のハロウィン特設ページ 👻</h1>
+      <div class="subtitle">期間限定の特別な企画やゲームを用意したよ。</div>
+
+      <h3>🦇 期間限定コンテンツ</h3>
+
+      <div class="event-item">
+        <h4>⌨ ハロウィンテーマ of タイピング！</h4>
+        <p>タイピング画面が怪しいハロウィン仕様のデザインに変身！出てくる単語を素早くタイピングしてお化けたちを撃退しよう。</p>
+        <!-- 同じフォルダー内の「タイピング」フォルダー内にある index.html へリンク -->
+        <a href="./タイピング/index.html" class="btn">ゲームをプレイする</a>
+      </div>
+
+      <div class="event-item">
+        <h4>🍬 リンゴキャッチならぬ「カボチャキャッチ」？</h4>
+        <p>上から落ちてくるカボチャやキャンディをたくさん集める、今だけの限定アレンジ企画！</p>
+          <a href="./飴・カボチャキャッチ/index.html" class="btn">ゲームをプレイする</a>
+      </div
+      
+      <h3>🔮 おまけ</h3>
+      <div class="event-item">
+        <h4>👁️ サイトの隠し要素（イースターエッグ）</h4>
+        <p>このページのどこかに小さな「お化け」が隠れているよ。探してみてね！</p>
+      </div>
+    </div> <!-- 💡 コンテナ全体の閉じタグを正しい位置（一番最後）に配置しました -->
+
+
+
+      
+
+
+        <!-- 👻 お化けをランダムに出現させるスクリプト -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        // お化けの要素を作成
+        const ghost = document.createElement("div");
+        ghost.textContent = "👻";
+        ghost.style.position = "fixed";
+        ghost.style.fontSize = "20px"; // 小さなお化け
+        ghost.style.cursor = "pointer";
+        ghost.style.zIndex = "9999";
+        ghost.style.userSelect = "none";
+        ghost.style.transition = "opacity 0.3s";
+
+        // 画面内のランダムな位置（上下左右に少し余裕を持たせる）
+        const randomX = Math.floor(Math.random() * (window.innerWidth - 40)) + 20;
+        const randomY = Math.floor(Math.random() * (window.innerHeight - 40)) + 20;
+        
+        ghost.style.left = `${randomX}px`;
+        ghost.style.top = `${randomY}px`;
+
+        // クリックしたら見つかったメッセージを出して消える仕掛け
+        ghost.addEventListener("click", () => {
+          alert("🎉 みつかっちゃった！ 👻");
+          ghost.style.opacity = "0";
+          setTimeout(() => ghost.remove(), 300);
+        });
+
+        document.body.appendChild(ghost);
+      });
+    </script>
+
+
+
+
+      <p class="footer-date">最終更新日: 2026年11月1日</p>
+    </div>
+
+  </body>
+</html>
